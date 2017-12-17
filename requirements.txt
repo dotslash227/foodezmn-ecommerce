@@ -78,6 +78,7 @@ pycparser==2.18           # via cffi
 pyjwt==1.5.3              # via django-payments, social-auth-core
 pyphen==0.9.4             # via weasyprint
 pytest-django==3.1.2
+parse
 pytest-mock==1.6.3
 pytest-vcr==0.3.0
 pytest==3.2.2
