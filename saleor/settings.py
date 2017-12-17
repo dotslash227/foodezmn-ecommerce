@@ -37,7 +37,7 @@ if os.environ.get('REDIS_URL'):
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://postgres:dillirox123@localhost:5432/foodezm',
+        default='postgresql://admin_foodezm:dillirox123@localhost:5432/admin_foodezm',
         conn_max_age=600)}
 
 TIME_ZONE = 'Asia/Kolkata'
