@@ -25,6 +25,5 @@ dist/
 /docs/_build/
 /media/
 /node_modules/
-/static/
 /saleor/static/assets/
 webpack-bundle.json
