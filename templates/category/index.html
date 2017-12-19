@@ -6,204 +6,59 @@
 {% load render_bundle from webpack_loader %}
 {% load prices_i18n %}
 
-{% block footer_scripts %}
-  {{ block.super }}
-{% endblock footer_scripts %}
-
 {% block title %}{{ category }} — {{ block.super }}{% endblock %}
 
-{% block breadcrumb %}
-  {{ block.super }}
-  {% for breadcrumb in breadcrumbs %}
-    <li{% if forloop.last %} class="active"{% endif %}>
-      {% if not forloop.last %}
-        <a href="{{ breadcrumb.get_absolute_url }}">{{ breadcrumb }}</a>
-      {% else %}
-        <span>{{ breadcrumb }}</span>
-      {% endif %}
-    </li>
-  {% endfor %}
-{% endblock breadcrumb %}
-
 {% block content %}
-  <div id="category-page">
-    <div class="category-top">
-      <div class="row">
-        <div class="col-md-7">
-          <ul class="breadcrumbs list-unstyled d-none d-md-block">
-            <li><a href="/">{% trans "Home"  context 'Category breadcrumbs home' %}</a></li>
-            {% for ancestor in category.get_ancestors %}
-              <li><a href='{{ ancestor.get_absolute_url }}'>{{ ancestor.name }}</a></li>
-            {% endfor %}
-            <li><a href='{{ category.get_absolute_url }}'>{{ category.name }}</a></li>
-          </ul>
-        </div>
-        <div class="col-md-5 filters-menu__wrapper">
-          <div class="row">
-            <div class="col-6 col-md-2 col-lg-6 filters-menu">
-              <span class="filters-menu__label d-md-none">Filters</span>
-            </div>
-            <div class="col-6 col-md-10 col-lg-6">
-              <div class="sort-by">
-                <div class="click-area d-none"></div>
-                <button class="btn btn-link">
-                  <div>
-                    <span>
-                      {% if now_sorted_by == 'name' %}
-                        {% blocktrans trimmed %}
-                          Sort by: <b>name</b>
-                        {% endblocktrans %}
-                      {% elif now_sorted_by == 'price' %}
-                        {% blocktrans trimmed %}
-                          Sort by: <b>price</b>
-                        {% endblocktrans %}
-                      {% endif %}
-                    </span>
-                    <div class="sort-order-icon">
-                      {% if is_descending %}
-                        <svg data-src="{% static "images/arrow_down.svg" %}"/>
-                      {% else %}
-                        <svg data-src="{% static "images/arrow_up.svg" %}"/>
-                      {% endif %}
-                    </div>
-                  </div>
-                </button>
-                <ul class="sort-list d-none">
-                  {% for choice, label in sort_by_choices %}
-                    <li>
-                      <div class="row">
-                        <div class="col-6">
-                          {% trans 'Sort by' context 'Category page filters' %}: <strong>{{ label }}</strong>
-                        </div>
-                        <div class="col-6">
-                          <div>
-                            <a href="{% get_sort_by_url choice %}">
-                              <span>{% trans 'ascending' context 'sort by option' %}</span>
-                              <div class="sort-order-icon float-right">
-                                <img src="{% static "images/arrow_up.svg" %}">
-                              </div>
-                            </a>
-                            <a href="{% get_sort_by_url choice descending=True %}">
-                              <span>{% trans 'descending' context 'sort by option' %}</span>
-                              <div class="sort-order-icon float-right">
-                                <img src="{% static "images/arrow_down.svg" %}">
-                              </div>
-                            </a>
+    <div id="content" class="site-content" tabindex="-1" style="margin-top:15px;">
+      <div class="col-full">
+        <div id="primary" class="content-area">
+           <main id="main" class="site-main" >
+              <div class="columns-4">
+                {% if products %}
+                 <ul class="products">
+                   {% for product, availability in products %}
+                    <li class="product first">
+                       <div class="product-outer">
+                          <div class="product-inner">
+                             <div class="product-image-wrapper">
+                                <a href="single-product-v1.html" class="woocommerce-LoopProduct-link">
+                                <img src="{{product.get_first_image}}" class="img-responsive" alt="">
+                                </a>
+                             </div>
+                             <div class="product-content-wrapper">
+                                <a href="single-product-v1.html" class="woocommerce-LoopProduct-link">
+                                   <h3>{{product}}</h3>
+                                   <div itemprop="description">
+                                      <p style="max-height: none;">{{product.description}}</p>
+                                   </div>
+                                </a>
+                                <div class="hover-area">
+                                   <a rel="nofollow" href="{{product.get_absolute_url}}" data-quantity="1" data-product_id="51" data-product_sku="" class="button product_type_simple add_to_cart_button ajax_add_to_cart">Starts from ₹{{product.price.0}}</a>
+                                </div>
+                             </div>
                           </div>
-                        </div>
-                      </div>
+                       </div>
+                       <!-- /.product-outer -->
                     </li>
-                  {% endfor %}
-                </ul>
+                    {% endfor %}
+                 </ul>
+                 {% else %}
+                  <p>No products in this category</p>
+                 {% endif %}
               </div>
-            </div>
-          </div>
+              <nav class="woocommerce-pagination">
+                 <ul class="page-numbers">
+                    <li><span class="page-numbers current">1</span></li>
+                    <li><a class="page-numbers" href="#">2</a></li>
+                    <li><a class="page-numbers" href="#">3</a></li>
+                    <li><a class="next page-numbers" href="#">Next Page &nbsp;&nbsp;&nbsp;→</a></li>
+                 </ul>
+              </nav>
+           </main>
+           <!-- #main -->
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 col-lg-3">
-        <div class="product-filters">
-          <div class="product-filters__categories">
-            <h2>
-              <strong>{{ category.name }}</strong>
-            </h2>
-            <ul class="product-filters__categories__childs no-parent">
-              {% for child in category.get_children %}
-                <li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-        <div class="filters-menu__body d-none d-md-block">
-          <h2>
-            {% trans 'Filters' context 'Filter heading title' %}
-            {% if filter.is_bound_unsorted %}
-              <a href=".">
-                <span class="clear-filters float-right">{% trans 'Clear filters' context 'Category page filters' %}</span>
-              </a>
-            {% endif %}
-          </h2>
-          <div class="product-filters">
-            <div class="product-filters__attributes" data-icon-up="{% static "images/chevron_up.svg" %}"
-                 data-icon-down="{% static "images/chevron_down.svg" %}">
-              <form method="get">
-                {% for field in filter.form %}
-                  {% if field.name == 'sort_by' %}
-                    {% comment %}
-                      Field 'sort_by' is hidden because it is rendered in header.
-                      This is required if you want to have sorting to be kept during further filtering.
-                    {% endcomment %}
+        <!-- #primary -->
 
-                    <input type="hidden" name="sort_by"
-                           value="{% if request.GET.sort_by %}{{ request.GET.sort_by }}{% endif %}">
-                  {% elif field.name == 'price' %}
-                    <div class="toggle-filter product-filters__price-range">
-                      <h3 class="filter-label">
-                        {{ field.label }}
-                        <div class="collapse-filters-icon">
-                          <img src="{% static "images/chevron_up.svg" %}">
-                        </div>
-                      </h3>
-                      <div class="filter-form-field" style="display:block">
-                        <div class="mb-3">
-                          <input id="{{ field.auto_id }}_0" name="{{ field.name }}_0"
-                                value="{% if field.value.0 %}{{ field.value.0 }}{% endif %}" type="number" min="0"
-                                class="form-control d-inline"
-                                placeholder="{% trans 'from' context 'Category price filter' %}"><span>-</span><input id="{{ field.auto_id }}_1" name="{{ field.name }}_1"
-                                value="{% if field.value.1 %}{{ field.value.1 }}{% endif %}" type="number" min="0"
-                                class="form-control d-inline" placeholder="{% trans 'to' context 'Category price filter' %}">
-                        </div>
-                      </div>
-                    </div>
-                  {% else %}
-                    <div class="toggle-filter">
-                      <h3 class="filter-label">
-                        {{ field.label }}
-                        <div class="collapse-filters-icon">
-                          <img src="{% static "images/chevron_up.svg" %}">
-                        </div>
-                      </h3>
-                      <div class="filter-form-field" style="display:block">
-                        {{ field }}
-                      </div>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-                <div class="product-filters">
-                  <button class="btn primary" type="submit">{% trans 'Update' context 'Category price filter' %}</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-8 col-lg-9 category-list">
-        <div>
-          <div>
-            {% if products %}
-              <div class="row">
-                  {% include "category/_items.html" with products=products %}
-              </div>
-              <div class="row">
-                <div class="m-auto">
-                  {% if products_paginated.has_other_pages %}
-                    {% bootstrap_pagination products_paginated extra=request.GET.urlencode %}
-                  {% endif %}
-                </div>
-              </div>
-            {% else %}
-              <div class="row no-results">
-                <div class="col-12">
-                  <svg data-src="{% static "images/pirate.svg" %}" width="360" height="360"/>
-                  <p>{% trans "Sorry, no matches found for your request." context "Search without results text" %}</p>
-                  <p>{% trans "Try again or shop new arrivals." context "Search without results text" %}</p>
-                </div>
-              </div>
-            {% endif %}
-          </div>
-        </div>
       </div>
     </div>
-  </div>
 {% endblock content %}
