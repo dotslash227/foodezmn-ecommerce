@@ -19,7 +19,11 @@
       <link rel="stylesheet" type="text/css" href="{% static "oscar/css/datetimepicker.css" %}" /> -->
    </head>
 
-   <body class="page-template-template-homepage-v1 home-v1">
+   {% if request.resolver_match.view_name == "home" %}
+      <body class="page-template-template-homepage-v1 home-v1">
+   {% else %}
+      <body class="single-product style-1 woocommerce">
+   {% endif %}
      <div id="page" class="hfeed site">
        {% include "header.html" %}
 
