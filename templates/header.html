@@ -20,7 +20,8 @@
                     <li class="menu-item"><a href="{% url "profile:details" %}">My Account</a></li>
                     <li class="menu-item"><a href="{% url "account_logout" %}">Logout</a></li>
                   {% else %}
-                    <li class="menu-item"><a href="{% url "account_login" %}">Login/Register</a></li>
+                    <li class="menu-item"><a href="{% url "account_login" %}">Login</a></li>
+                    <li class="menu-item"><a href="{% url "account_signup" %}">Register</a></li>
                   {% endif %}
                </ul>
             </div>
