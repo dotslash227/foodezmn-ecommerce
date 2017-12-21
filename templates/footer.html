@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load gross from prices_i18n %}
 
 <div class="footer-v1-static-content">
    <div class="kc-css-994088 kc_row">
@@ -55,7 +56,7 @@
       <div class="pizzaro-handheld-footer-bar">
          <ul class="columns-3">
             <li class="my-account">
-               <a href="login-and-register.html">My Account</a>
+               <a href="{% url "account_login" %}">My Account</a>
             </li>
             <li class="search">
                <a href="#">Search</a>
@@ -71,8 +72,12 @@
                </div>
             </li>
             <li class="cart">
-               <a class="footer-cart-contents" href="cart.html" title="View your shopping cart">
-               <span class="count">2</span>
+               <a class="footer-cart-contents" href="{% url "cart:index" %}" title="View your shopping cart">
+               {% if quantity > 0 %}
+                <span class="count">{{quantity}}</span>
+               {% else %}
+                <span class="count">0</span>
+               {% endif %}
                </a>
             </li>
          </ul>
