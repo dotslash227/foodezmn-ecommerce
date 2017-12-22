@@ -9,12 +9,12 @@
                <div class="stretch-full-width kc-col-container">
                   <div class="kc-css-126640 kc_shortcode kc_wrap_instagram  kc_ins_col_6">
                      <ul class="row">
-                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4Gyf2hTkr/" target="_blank"><img alt="" src="assets/images/footer/1.jpg"></a></li>
-                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4Gtf1BCmM/" target="_blank"><img alt="" src="assets/images/footer/2.jpg"></a></li>
-                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4GnvhBqNt/" target="_blank"><img alt="" src="assets/images/footer/3.jpg"></a></li>
-                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4GhsuhQE4/" target="_blank"><img alt="" src="assets/images/footer/4.jpg"></a></li>
-                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4F_ZbBuxI/" target="_blank"><img alt="" src="assets/images/footer/5.jpg"></a></li>
-                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4F8fLhgkp/" target="_blank"><img alt="" src="assets/images/footer/6.jpg"></a></li>
+                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4Gyf2hTkr/" target="_blank"><img alt="" src="{% static "new/images/footer/1.jpg" %}"></a></li>
+                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4Gtf1BCmM/" target="_blank"><img alt="" src="{% static "new/images/footer/2.jpg" %}"></a></li>
+                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4GnvhBqNt/" target="_blank"><img alt="" src="{% static "new/images/footer/3.jpg" %}"></a></li>
+                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4GhsuhQE4/" target="_blank"><img alt="" src="{% static "new/images/footer/4.jpg" %}"></a></li>
+                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4F_ZbBuxI/" target="_blank"><img alt="" src="{% static "new/images/footer/5.jpg" %}"></a></li>
+                         <li class="col-md-2 col-sm-2 col-lg-2 col-xs-4"><a href="https://www.instagram.com/p/BO4F8fLhgkp/" target="_blank"><img alt="" src="{% static "new/images/footer/6.jpg" %}"></a></li>
                      </ul>
                   </div>
                </div>
@@ -38,7 +38,7 @@
       </div>
       <div class="footer-logo">
          <a href="{% url "home" %}" class="custom-logo-link" rel="home">
-               <img src="{% static "logo.png" %}" />
+               <img src="{% static "new/logo.png" %}" />
          </a>
       </div>
       <div class="site-address">
@@ -73,11 +73,7 @@
             </li>
             <li class="cart">
                <a class="footer-cart-contents" href="{% url "cart:index" %}" title="View your shopping cart">
-               {% if quantity > 0 %}
-                <span class="count">{{quantity}}</span>
-               {% else %}
-                <span class="count">0</span>
-               {% endif %}
+                <span class="count">{{cart_counter}}</span>
                </a>
             </li>
          </ul>

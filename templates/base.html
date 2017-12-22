@@ -1,5 +1,6 @@
-
 {% load staticfiles %}
+{% load render_bundle from webpack_loader %}
+
 <!DOCTYPE html>
 <html lang="en-US" itemscope="itemscope" itemtype="http://schema.org/WebPage">
 <head>
@@ -40,4 +41,7 @@
      <script type="text/javascript" src="{% static "new/js/social.share.min.js" %}"></script>
      <script type="text/javascript" src="{% static "new/js/jquery.mCustomScrollbar.concat.min.js" %}"></script>
      <script type="text/javascript" src="{% static "new/js/scripts.min.js" %}"></script>
+     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+     {% render_bundle 'vendor' 'js' %}
+     {% render_bundle 'storefront' 'js' %}
    </body>

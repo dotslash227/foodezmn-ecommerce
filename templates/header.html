@@ -1,4 +1,6 @@
 {% load staticfiles %}
+{% load i18n %}
+{% load price_range from price_ranges %}
 {% load gross from prices_i18n %}
 
 <header id="masthead" class="site-header header-v1" style="background-image: none; ">
@@ -32,7 +34,7 @@
                  <li class="menu-item"><a href="{% url "account_login" %}">Login</a></li>
                  <li class="menu-item"><a href="{% url "account_signup" %}">Register</a></li>
                  {% for each in categories %}
-                   <li class="menu-item"><a href="/catalogue/category/{{each.name}}_{{each.pk}}"><i class="po po-{{each.name|lower}}"></i>{{each.name}}</a></li>
+                   <li class="menu-item"><a href="{% url "product:category" "category" each.id %}"><i class="po po-{{each.name|lower}}"></i>{{each.name}}</a></li>
                  {% endfor %}
                  <li class="menu-item"><a>About Us</a></li>
                  <li class="menu-item"><a>Contact Us</a></li>
@@ -62,11 +64,7 @@
                   <ul class="sub-menu">
                      <li>
                         <a href="{% url "cart:index" %}" title="View your shopping cart">
-                          {% if quantity > 0 %}
-                            <span class="count">{{quantity}} items</span> <span class="amount">₹{{total}}</span>
-                          {% else %}
-                            <span class="count">0 items</span> <span class="amount">₹0</span>
-                          {% endif %}
+                            <span class="count">{{cart_counter}} items</span></span>
                         </a>
                      </li>
                   </ul>
@@ -77,7 +75,6 @@
       <div class="pizzaro-secondary-navigation">
          <nav class="secondary-navigation" aria-label="Secondary Navigation">
             <ul class="menu">
-
               {% for each in categories %}
                 <li class="menu-item"><a href="{% url "product:category" "category" each.id %}"><i class="po po-{{each.name|lower}}"></i>{{each.name}}</a></li>
               {% endfor %}

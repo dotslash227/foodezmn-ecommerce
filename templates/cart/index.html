@@ -5,11 +5,146 @@
 {% load render_bundle from webpack_loader %}
 {% load get_thumbnail from product_images %}
 
-{% block title %}{% trans "Your cart" context "Cart page title" %} — {{ block.super }}{% endblock %}
-
+{% block title %}Shopping Cart{% endblock %}
 
 
 {% block content %}
+
+<div id="content" class="site-content" tabindex="-1" >
+   <div class="col-full">
+      <div class="pizzaro-breadcrumb">
+         <nav class="woocommerce-breadcrumb" >
+            <a href="{% url "home" %}">Home</a>
+            <span class="delimiter"><i class="po po-arrow-right-slider"></i></span>Shopping Cart
+         </nav>
+      </div>
+   <div id="primary" class="content-area">
+      <main id="main" class="site-main">
+        <div class="pizzaro-order-steps">
+           <ul>
+              <li class="cart">
+                 <span class="step" style="background-color:#c00a27;">1</span>Shopping Cart
+              </li>
+              <li class="checkout">
+                 <span class="step">2</span>Checkout
+              </li>
+              <li class="complete">
+                 <span class="step">3</span>Order Complete
+              </li>
+           </ul>
+        </div>
+        <center>
+        <div id="post-8" class="post-8 page type-page status-publish hentry">
+          <div class="entry-content">
+             <div class="woocommerce">
+               {% if not cart_lines %}
+               <div class="cart__empty">
+                 <img src="{% static 'images/pirate_cart.png' %}"
+                      srcset="{% static 'images/pirate_cart.png' %} 1x, {% static 'images/pirate_cart2x.png' %} 2x">
+                 <h2>{% trans "There are no products in your shopping cart." context "Empty cart message" %}</h2>
+               </div>
+               {% else %}
+                  <table class="shop_table shop_table_responsive cart" >
+                     <thead>
+                        <tr>
+                           <!-- <th class="product-remove">&nbsp;</th> -->
+                           <th class="product-thumbnail">&nbsp;</th>
+                           <th class="product-name">Product</th>
+                           <th class="product-quantity">Quantity</th>
+                           <th class="product-subtotal">Total</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                       {% for line in cart_lines %}
+                         <tr class="cart_item">
+                            <!-- <td class="product-remove">
+                              <span class="cart-item-delete">
+                               <a href="#" class="remove" >&times;</a>
+                              </span>
+                            </td> -->
+                            <td class="product-thumbnail">
+                               <a href="{{line.variant.product.get_absolute_url}}">
+                               <img width="180" height="180" src="{{line.variant.product.get_first_image}}" alt=""/>
+                               </a>
+                            </td>
+                            <td class="product-name" data-title="Product">
+                               <a href="single-product-v1.html">{{line.variant.product.name}}</a>
+                               <dl class="variation">
+                                  <!-- <dt class="variation-Baseprice">Base price:</dt> -->
+                                  <dd class="variation-Baseprice">
+                                     <p><span class="woocommerce-Price-amount amount">{{line.variant}}</span></p>
+                                  </dd>
+                                  <!-- <dt class="variation-PickSizespanclasswoocommerce-Price-amountamountspanclasswoocommerce-Price-currencySymbol36span2590span">Pick Size ( <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">&#036;</span>25.90</span> ):
+                                  </dt>
+                                  <dd class="variation-PickSizespanclasswoocommerce-Price-amountamountspanclasswoocommerce-Price-currencySymbol36span2590span">
+                                     <p>29  cm</p>
+                                  </dd> -->
+                               </dl>
+                            </td>
+                            <td class="product-quantity" data-title="Quantity">
+                               <div class="qty-btn cart__line">
+                                  <label>Quantity</label>
+                                  <div class="cart__line__quantity quantity">
+                                    <form role="form" action="{% url "cart:update-line" variant_id=line.variant.pk %}" method="post" class="form-cart">
+                                      <div class="{% if form.quantity.errors %} has-error{% endif %}" tabindex="-1">
+                                        <input type="number" value="1" name="quantity" id="id_quantity" class="input-text qty text" style="width:65px; text-align:center;"/>
+
+                                      </div>
+                                      {% csrf_token %}
+                                    </form>
+                                    <span class="cart-item-delete">
+                                      <svg data-src="{% static "images/delete.svg" %}" height="20px" width="20px" />
+                                    </span>
+                                  </div>
+                               </div>
+                            </td>
+                            <!-- <td class="product-price" data-title="Delete">
+                               <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">₹</span>{{line.variant.get_price_per_item.0}}</span>
+                               <span class="cart-item-delete">
+                                 <svg data-src="{% static "images/delete.svg" %}" height="20px" width="20px" />
+                               </span>
+                            </td> -->
+                            <td class="cart-item-price product-subtotal"  data-product-id="{{ line.variant.pk }}">
+                               <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol"></span>{% gross line.get_total html=True %}</span>
+                            </td>
+                         </tr>
+                       {% endfor %}
+                       <tr>
+                          <td colspan="6" class="actions">
+                             <div class="coupon">
+                                <label for="coupon_code">Coupon:</label>
+                                <input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="Coupon code" />
+                                <input type="submit" class="button" name="apply_coupon" value="Apply Coupon" />
+                             </div>
+                             <input type="submit" class="button" name="update_cart" value="Update Cart" />
+                             <div class="wc-proceed-to-checkout">
+                                <a href="{% url "checkout:login" %}" class="checkout-button button alt wc-forward">Proceed to Checkout</a>
+                             </div>
+                             <input type="hidden" id="_wpnonce" name="_wpnonce" value="21ca9d92f8" /><input type="hidden" name="_wp_http_referer" value="/pizzaro/cart/" />
+                          </td>
+                       </tr>
+                     </tbody>
+                   </table>
+                 <div class="cart-collaterals">
+                    <div class="cart_totals ">
+                       {% include 'cart/_subtotal_table.html' %}
+                    </div>
+                 </div>
+               {% endif %}
+             </div>
+          </div>
+        </div>
+        </center>
+      </main>
+   </div>
+ </div>
+</div>
+
+{% endblock content %}
+
+
+
+{% comment %}
 
 <div id="content" class="site-content" tabindex="-1" >
    <div class="col-full">
@@ -93,80 +228,4 @@
    <!-- #primary -->
 </div>
 
-{% endblock content %}
-
-
-{% comment %}
-<div class="alert alert-success remove-product-alert d-none">
-  {% trans "Product has been removed from cart" context "Cart message" %}
-  <button type="button" class="close close-msg" aria-hidden="true">&times;</button>
-</div>
-<div class="cart">
-  {% if cart_lines %}
-    <div class="table__header d-none d-md-block">
-      <div class="row">
-        <div class="col-md-7">
-          <small>{% trans "Product" context "Cart table header" %}</small>
-        </div>
-        <div class="col-md-3">
-          <small>{% trans "Quantity" context "Cart table header" %}</small>
-        </div>
-        <div class="col-md-2 text-right">
-          <small>{% trans "Price" context "Cart table header" %}</small>
-        </div>
-      </div>
-    </div>
-    {% for line in cart_lines %}
-      <div class="cart__line{% if forloop.last %} last{% endif %} table__row">
-        <div class="row">
-          <div class="col-7 cart__line__product">
-            <a class="link--clean" href="{{ line.variant.get_absolute_url }}">
-              <img src="{% get_thumbnail line.variant.product.images.first.image method="crop" size="60x60" %}"
-                   srcset="{% get_thumbnail line.variant.product.images.first.image method="crop" size="60x60" %} 1x, {% get_thumbnail line.variant.product.images.first.image method="crop" size="120x120" %} 2x"
-                   alt="">
-              <p>{{ line.variant.product }}
-                <br><small>{{ line.variant }}</small></p>
-            </a>
-          </div>
-          <div class="col-5">
-            <div class="row">
-              <div class="cart__line__quantity col-md-7 col-12">
-                <form role="form" action="{% url "cart:update-line" variant_id=line.variant.pk %}" method="post" class="form-cart">
-                  <div class="{% if form.quantity.errors %} has-error{% endif %}" tabindex="-1">
-                    {{ line.form.quantity }}
-                  </div>
-                  {% csrf_token %}
-                </form>
-                <span class="cart-item-delete">
-                  <svg data-src="{% static "images/delete.svg" %}" height="20px" width="20px" />
-                </span>
-                <small class="cart__line__quantity-error text-danger"></small>
-              </div>
-              <div class="cart-item-price col-md-5 col-12" data-product-id="{{ line.variant.pk }}">
-                <p class="text-right">{% gross line.get_total html=True %}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-    <div class="cart__subtotal">
-      {% include 'cart/_subtotal_table.html' %}
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <a href="{% url "checkout:login" %}" class="btn primary float-right cart__submit">
-          {% trans "Checkout" context "Cart primary action" %}
-        </a>
-      </div>
-    </div>
-  {% else %}
-    <div class="cart__empty">
-      <img src="{% static 'images/pirate_cart.png' %}"
-           srcset="{% static 'images/pirate_cart.png' %} 1x, {% static 'images/pirate_cart2x.png' %} 2x">
-      <h2>{% trans "There are no products in your shopping cart." context "Empty cart message" %}</h2>
-      <a href="/" class="btn primary">{% trans "Check out our sales" context "Empty cart link" %}</a>
-    </div>
-  {% endif %}
-</div>
 {% endcomment %}
