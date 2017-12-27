@@ -6,12 +6,13 @@ from django.core.serializers import serialize
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 
-from saleor.product.models import Category
+from saleor.product.models import Category, Product
+from saleor.order.models import Order
 
 @csrf_exempt
 def signup(request):
     if request.method == "POST":
-        email = request.POST.get("email")
+        email = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request=request, email=email, password=password)
         if user:
@@ -46,3 +47,30 @@ def get_category(request):
         return HttpResponse(category)
     else:
         return HttpResponse("404")
+
+@csrf_exempt
+def recent_orders(request):
+    email = request.POST.get("email")
+    token = request.POST.get("token")
+    orders = Order.objects.filter(user_email=email, token=token)
+
+    data = serialize("json", orders)
+
+    return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def get_product_category_wise(request):
+    category_id = request.POST.get("category_id")
+    category = get_object_or_404(Category, id=category_id)
+    products = Product.objects.filter(categories__id=category.id)
+
+    data = serialize("json", products)
+
+    return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def get_product(request):
+    product_id = request.POST.get("product_id")
+    product = Product.objects.get(id=product_id)
+
+    return HttpResponse(product)
