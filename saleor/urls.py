@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^feeds/',
         include((feed_urls, 'data_feeds'), namespace='data_feeds')),
     url(r'^search/', include((search_urls, 'search'), namespace='search')),
+    url(r'^mobile/', include("saleor.mobile.urls")),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
     url(r'', include('payments.urls')),
