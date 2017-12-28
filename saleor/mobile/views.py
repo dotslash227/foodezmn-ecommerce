@@ -8,18 +8,19 @@ from django.shortcuts import get_object_or_404
 
 from saleor.product.models import Category, Product
 from saleor.order.models import Order
+from saleor.userprofile.models import User
 
 @csrf_exempt
 def signup(request):
-    if request.method == "POST":
-        email = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(request=request, email=email, password=password)
-        if user:
-            return HttpResponse("exists")
-        else:
-            message.success(request, _("User has been created"))
-            return HttpResponse("done")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
+    print (email, password)
+    user = authenticate(request=request, email=email, password=password)
+    if user is not None:
+        return HttpResponse("false")
+    else:
+        User.objects.create_user(email=email, password=password)
+        return HttpResponse("true")
 
 @csrf_exempt
 def login(request):
@@ -27,7 +28,7 @@ def login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request=request, email=username, password=password)
-        if user is not None:
+        if user is not None and is_active:
             return HttpResponse("true")
         else:
             return HttpResponse("false")
