@@ -656,15 +656,25 @@ def ajax_reorder_product_images(request, product_pk):
 @staff_member_required
 def ajax_upload_image(request, product_pk):
     product = get_object_or_404(Product, pk=product_pk)
-    form = forms.UploadImageForm(
-        request.POST or None, request.FILES or None, product=product)
+    # form = forms.UploadImageForm(
+    #     request.POST or None, request.FILES or None, product=product)
     status = 200
-    if form.is_valid():
-        image = form.save()
-        ctx = {'id': image.pk, 'image': None, 'order': image.order}
-    elif form.errors:
+    image_file = request.FILES["imagefile"]
+    p = ProductImage(product=product, image=image_file)
+    try:
+        p.save()
+    except:
         status = 400
-        ctx = {'error': form.errors}
+        ctx = {"status":"error in uploading"}
+    else:
+        status = 400
+        ctx = {"status":"done"}
+    # if form.is_valid():
+    #     image = form.save()
+    #     ctx = {'id': image.pk, 'image': None, 'order': image.order}
+    # elif form.errors:
+    #     status = 400
+    #     ctx = {'error': form.errors}
     return JsonResponse(ctx, status=status)
 
 
