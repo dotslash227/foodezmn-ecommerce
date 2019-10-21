@@ -41,7 +41,7 @@ django-storages==1.6.5
 django-templated-email==2.2.0
 django-versatileimagefield==1.7.1
 django-webpack-loader==0.5.0
-django==1.11.5
+django==1.11.23
 dnspython==1.15.0         # via email-validator
 docutils==0.14            # via botocore
 elasticsearch-dsl==5.3.0
@@ -78,7 +78,6 @@ pycparser==2.18           # via cffi
 pyjwt==1.5.3              # via django-payments, social-auth-core
 pyphen==0.9.4             # via weasyprint
 pytest-django==3.1.2
-parse
 pytest-mock==1.6.3
 pytest-vcr==0.3.0
 pytest==3.2.2
@@ -101,10 +100,10 @@ text-unidecode==1.0
 tinycss2==0.6.1           # via cssselect2, weasyprint
 typing==3.6.2             # via promise
 urllib3==1.21.1           # via elasticsearch, requests
+uwsgi==2.0.18
 vcrpy==1.10.3
 vine==1.1.4               # via amqp
 weasyprint==0.41
 webencodings==0.5.1       # via html5lib, tinycss2
 wrapt==1.10.11            # via vcrpy
 xmltodict==0.11.0         # via django-payments
-django-cors-headers
